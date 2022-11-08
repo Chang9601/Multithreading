@@ -5,17 +5,17 @@
 #include <unistd.h>
 
 long count;
-/* 원자성을 보장하는 매커니즘인 뮤텍스 */
+/* 뮤텍스: 원자성을 보장하는 매커니즘 */
 pthread_mutex_t mutex;
 
 void *
-increment(long n)
+increment(void *arg)
 {
-	
+	long n = *((long *)arg);
 	/*
 	 * 뮤텍스로 임계구역에 원자성 보장
-	 * pthread_mutex_lock() 함수로 뮤텍스 잠금
-	 * pthread_mutex_unlock() 함수로 뮤텍스 해제
+	 * pthread_mutex_lock(): 뮤텍스 잠금
+	 * pthread_mutex_unlock(): 뮤텍스 해제
 	 */
 	for (int i = 0; i < n; i++) {
 		pthread_mutex_lock(&mutex);
@@ -40,9 +40,9 @@ main(int argc, char *argv[])
 
 	pthread_mutex_init(&mutex, NULL);
 
-	pthread_create(&thread1, NULL, (void *)increment, (void *)500000);
-	pthread_create(&thread2, NULL, (void *)increment, (void *)500000);
-	pthread_create(&thread3, NULL, (void *)increment, (void *)500000);
+	pthread_create(&thread1, NULL, (void *)increment, (void *)&n);
+	pthread_create(&thread2, NULL, (void *)increment, (void *)&n);
+	pthread_create(&thread3, NULL, (void *)increment, (void *)&n);
 
 	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);

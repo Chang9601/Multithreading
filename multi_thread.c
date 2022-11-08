@@ -20,8 +20,7 @@ main(int argc, char *argv[])
 	
 	/*
 	 * 3개의 스레드 생성
-	 * pthread_create() 함수 호출 이후, 어느 스레드가 CPU를 점유하는지에 대한 보장이 없다
-	 * 따라서 출력 결과는 프로그램 실행마다 변할 수 있다
+	 * pthread_create() 함수 호출 이후, 어느 스레드가 CPU를 점유하는지에 대한 보장이 없음. 따라서 출력 결과는 프로그램 실행마다 변경될 수 있음
 	 */
 	pthread_create(&thread1, NULL, (void *)printSentence, (void *)"I'm so bored right now.");
 	pthread_create(&thread2, NULL, (void *)printSentence, (void *)"Sorry. I kind of zoned out.");
@@ -30,7 +29,7 @@ main(int argc, char *argv[])
 	/*
 	 * pthread_join() 함수는 매개변수로 들어온 스레드가 종료될 때까지 대기
 	 * 프로세스에 실행되는 waitpid()와 몇 가지 차이점 존재
-	 * 만약 pthread_join() 함수를 사용하지 않으면 메인 스레드가 바로 종료되기 때문에 출력값이 없을 수 있다
+	 * 만약 pthread_join() 함수를 사용하지 않으면 메인 스레드가 바로 종료되기 때문에 출력값이 없음
 	 */
 	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);
